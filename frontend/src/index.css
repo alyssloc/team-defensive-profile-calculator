@@ -1,0 +1,68 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("/gameboy_background.png");
+  background-size: 100vw 100vh; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
+  min-height: 100vh;
+  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+.retro-theme {
+  font-family: 'Press Start 2P', Consolas, monospace;
+  font-size: 0.75rem; 
+}
+
+.retro-box {
+  background-color: #ffffff;
+  border: 3px solid #000000; 
+  border-radius: 0; 
+  padding: 10px; 
+  color: #000000;
+  box-shadow: 4px 4px 0px #000000; 
+  text-shadow: none; 
+}
+
+/* Blocky inputs - Scaled Down */
+.retro-select {
+  font-family: 'Press Start 2P', Consolas, monospace;
+  border: 2px solid #000000;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 4px; 
+  margin: 2px;
+  border-radius: 0;
+  font-size: 0.55rem; 
+  outline: none;
+  cursor: pointer;
+  text-shadow: none;
+}
+
+.retro-button {
+  font-family: 'Press Start 2P', Consolas, monospace;
+  background-color: #ffffff;
+  color: #000000;
+  border: 3px solid #000000;
+  padding: 10px 20px; 
+  cursor: pointer;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0px #000000;
+  transition: transform 0.1s, box-shadow 0.1s;
+  text-shadow: none;
+}
+
+.retro-button:active {
+  box-shadow: 0px 0px 0px #000000;
+  transform: translate(4px, 4px); 
+}
+
+.retro-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

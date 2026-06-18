@@ -1,0 +1,7 @@
+int gen
+<type 1> <type 2>
+<type 1>
+<type 1> <type 2>
+<type 1> <type 2>
+<type 1> 
+<type 1> <type 2>
