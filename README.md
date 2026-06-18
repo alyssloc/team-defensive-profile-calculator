@@ -34,7 +34,8 @@ Frontend dispatches a JSON payload containing the generation integer and an arra
 
 Backend parses the request payload, handles the CORS preflight OPTIONS handshake, maps inputs to type-chart enums, calculates defensive values, and returns a JSON array of type-score pairs.
 
-
+## Active Link
+https://pokemon-defensive-profile-frontend-295929563912.us-central1.run.app/
 
 ## Run Locally
 
