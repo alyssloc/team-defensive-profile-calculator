@@ -8,13 +8,13 @@ Helpful in determining your team's defensive holes, especially for nuzlocking
 
 Architecture & Tech Stack:
 
-Decoupled frontend and backend microservices containerized with Docker, provisioned via Terraform, and deployed to Google Cloud Run.
+Decoupled frontend and backend services containerized with Docker, provisioned via Terraform, and deployed to Google Cloud Run.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 System Components:
 
-Frontend: React SPA (TypeScript / Vite) compiled to static assets and served via an isolated Cloud Run service.
+Frontend: React SPA (TypeScript / Vite) served via an isolated Cloud Run service.
 
 Backend: Stateless C++20 REST API using the Crow microframework. Executes defensive type-chart computations and exposures a single POST/OPTIONS endpoint at /calculate.
 
@@ -32,7 +32,7 @@ Client selects type inputs in the React UI.
 
 Frontend dispatches a JSON payload containing the generation integer and an array of type strings via native fetch.
 
-Backend parses the request payload, handles the CORS preflight OPTIONS handshake, maps inputs to type-chart enums, calculates defensive values, and returns a JSON array of type-score pairs.
+Backend parses the request payload, maps inputs to type-chart enums, calculates defensive values, and returns a JSON array of type-score pairs.
 
 ## Active Link
 https://pokemon-defensive-profile-frontend-295929563912.us-central1.run.app/
@@ -66,7 +66,5 @@ Compile
 Run via the command line
 
 ```bash
-  ./bin/calculator
+  ./calculator
 ```
-
-
