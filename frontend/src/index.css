@@ -1,20 +1,25 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@font-face {
+  font-family: gbFont;
+  src: url('fonts/pokemonClassic.ttf') format('truetype');
+}
+
 
 body {
   margin: 0;
   padding: 0;
-  background-image: url("/gameboy_background.png");
+  background-image: url("/hoenn_horizon.jpg");
   background-size: 100vw 100vh; 
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   
   min-height: 100vh;
-  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  font-family: gbFont;
 }
 .retro-theme {
-  font-family: 'Press Start 2P', Consolas, monospace;
+  font-family: gbFont;
   font-size: 0.75rem; 
 }
 
@@ -28,9 +33,9 @@ body {
   text-shadow: none; 
 }
 
-/* Blocky inputs - Scaled Down */
+
 .retro-select {
-  font-family: 'Press Start 2P', Consolas, monospace;
+  font-family: gbFont;
   border: 2px solid #000000;
   background-color: #ffffff;
   color: #000000;
@@ -44,7 +49,7 @@ body {
 }
 
 .retro-button {
-  font-family: 'Press Start 2P', Consolas, monospace;
+  font-family: gbFont;
   background-color: #ffffff;
   color: #000000;
   border: 3px solid #000000;
@@ -67,9 +72,33 @@ body {
   cursor: not-allowed;
 }
 
-@media screen and (max-width: 700px) {
-  body {
-    background-image: url('/hoenn_horizon.jpg');
-    height: 400px;
+/* changing output format for laptop to display input/output side by side */
+.calculator-container {
+  max-width: 550px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: max-width 0.2s ease-in-out;
+}
+
+@media screen and (min-width: 768px) {
+  .calculator-container.has-results {
+    max-width: 1150px;
+  }
+
+  .calculator-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .calculator-form-side {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .calculator-results-side {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0 !important; 
   }
 }
