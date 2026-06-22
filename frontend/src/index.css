@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: gbFont;
-  src: url('fonts/pokemonClassic.ttf') format('truetype');
+  src: url('/fonts/pokemonClassic.ttf') format('truetype');
 }
 
 
