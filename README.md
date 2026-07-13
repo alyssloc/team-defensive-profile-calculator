@@ -16,7 +16,7 @@ System Components:
 
 Frontend: React SPA (TypeScript / Vite) served via an isolated Cloud Run service.
 
-Backend: Stateless C++20 REST API using the Crow microframework. Executes defensive type-chart computations and exposures a single POST/OPTIONS endpoint at /calculate.
+Backend: Stateless C++ REST API using the Crow microframework. Executes defensive type-chart computations and exposures a single POST/OPTIONS endpoint at /calculate.
 
 Infrastructure: Declarative GCP resource provisioning managed via Terraform (IaC).
 
@@ -25,7 +25,7 @@ CI/CD: Automated GitHub Actions pipelines for Docker container builds, Artifact 
 -----------------------------------------------------------------------------
 
 
-Data Flow & Integration:
+Data Flow:
 
 
 Client selects type inputs in the React UI.
@@ -34,8 +34,15 @@ Frontend dispatches a JSON payload containing the generation integer and an arra
 
 Backend parses the request payload, maps inputs to type-chart enums, calculates defensive values, and returns a JSON array of type-score pairs.
 
+-----------------------------------------------------------------------------
+
+Hosting: 
+
+Backend and frontend deployed on seperate Cloud Run Services, deployed using Firebase Hosting.
+
+
 ## Active Link
-https://pokemon-defensive-profile-frontend-295929563912.us-central1.run.app/
+https://pokemonteamdefensivecalculator.com
 
 ## Run Locally
 
