@@ -18,6 +18,10 @@ RUN echo 'server { \
     listen 8080; \
     server_name localhost; \
     \
+    if ($http_x_forwarded_host = "") { \
+        return 403 "Direct access is forbidden."; \
+    } \
+    \
     location / { \
         root /usr/share/nginx/html; \
         index index.html; \
