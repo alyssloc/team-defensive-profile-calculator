@@ -9,8 +9,6 @@ RUN pnpm install
 
 COPY . .
 
-
-ENV VITE_API_BASE_URL="https://pokemon-defensive-profile-295929563912.us-central1.run.app"
 RUN pnpm build
 
 # 2- prod
@@ -20,6 +18,11 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 RUN echo 'server { \
     listen 8080; \
     server_name localhost; \
+    \
+    if ($http_host ~* "run\.app") { \
+        return 403 "Direct access via run.app is forbidden."; \
+    } \
+    \
     location / { \
         root /usr/share/nginx/html; \
         index index.html; \
