@@ -20,7 +20,7 @@ Backend: Stateless C++ REST API using the Crow microframework. Executes defensiv
 
 Infrastructure: Declarative GCP resource provisioning managed via Terraform (IaC).
 
-CI/CD: Automated GitHub Actions pipelines for Docker container builds, Artifact Registry pushes, and Cloud Run deployments upon code merge.
+CI/CD: Automated GitHub Actions pipelines for Docker container builds, Artifact Registry pushes, and Cloud Run deployments.
 
 -----------------------------------------------------------------------------
 
@@ -45,6 +45,7 @@ Backend and frontend deployed on seperate Cloud Run Services, deployed using Fir
 https://pokemonteamdefensivecalculator.com
 
 ## Run Locally
+This project was orginally built to accept command line or file inputs. 
 
 Clone the project
 
