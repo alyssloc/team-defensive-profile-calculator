@@ -5,3 +5,4 @@
 !package-lock.json
 .env*
 Dockerfile
+node_modules
