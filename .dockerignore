@@ -1,0 +1,7 @@
+.git
+.github
+*.json
+!package.json
+!package-lock.json
+.env*
+Dockerfile

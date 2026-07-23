@@ -17,13 +17,17 @@ int main(int argc, char **argv)
     }
 
     start.get_input(file);
+
     // creating a team object
     Team team = start.create_team();
+
     // printing out individual pokemon info
     team.print_pokemon_info();
+
     // creating team defensive profile and outputting that info
     team.populate_team_profile();
     team.output_team_profile();
+    
     // printing the closing message
     start.print_closing_message();
     return 0;
