@@ -3,6 +3,8 @@
 *.json
 !package.json
 !package-lock.json
+!pnpm-lock.yaml
+!tsconfig*.json
 .env*
 Dockerfile
 node_modules
