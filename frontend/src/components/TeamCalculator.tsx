@@ -9,6 +9,18 @@ const ALL_POKEMON_TYPES = [
   "Rock", "Ghost", "Dragon", "Steel", "Dark", "Fairy"
 ];
 
+const DEFAULT_RESULTS: TypeScoreResult[] = [
+  { type: 'Normal', score: 0 }, { type: 'Fire', score: 0 },
+  { type: 'Water', score: 0 }, { type: 'Electric', score: 0 },
+  { type: 'Grass', score: 0 }, { type: 'Ice', score: 0 },
+  { type: 'Fighting', score: 0 }, { type: 'Poison', score: 0 },
+  { type: 'Ground', score: 0 }, { type: 'Flying', score: 0 },
+  { type: 'Psychic', score: 0 }, { type: 'Bug', score: 0 },
+  { type: 'Rock', score: 0 }, { type: 'Ghost', score: 0 },
+  { type: 'Dragon', score: 0 }, { type: 'Steel', score: 0 },
+  { type: 'Dark', score: 0 }, { type: 'Fairy', score: 0 },
+];
+
 
 function useMediaQuery(query: string): boolean {
   const subscribe = useCallback(
@@ -107,7 +119,7 @@ export default function TeamCalculator() {
 
   return (
     <div 
-      className={`calculator-container ${results ? 'has-results' : ''}`}
+      className="calculator-container has-results"
       style={{ 
         margin: '6vh auto 0', 
         padding: '10px',
@@ -148,9 +160,22 @@ export default function TeamCalculator() {
         </select>
       </div>
       
-      <div className="calculator-layout">
+      <div 
+        className="calculator-layout" style={{ 
+          display: 'flex', 
+          flexDirection: isLargeScreen ? 'row' : 'column', 
+          gap: '40px', 
+          alignItems: 'flex-start' 
+        }}
+      >
         {/* left: inputs */}
-        <div className="calculator-form-side">
+        <div 
+          className="calculator-form-side" style={{ 
+            flex: isLargeScreen ? '1 1 350px' : '1 1 auto',
+            width: '100%',
+            maxWidth: isLargeScreen ? '450px' : 'none' 
+          }} >
+
           <form onSubmit={handleSubmit}>
             <h2 style={{ color: '#000000', marginBottom: '20px', fontSize: '1.2rem', marginTop: 0 }}>
               YOUR TEAM
@@ -203,17 +228,21 @@ export default function TeamCalculator() {
           </form>
         </div>
 
-        {/* right side (large screens) or bottom side (mobile screens after calc) */}
-        {(isLargeScreen || results || error) && (
-          <div className="calculator-results-side">
+
+        {/* right side (Always rendered to prevent layout shift) */}
+        <div 
+          className="calculator-results-side" style={{
+              flex: isLargeScreen ? '2 1 450px' : '1 1 auto',
+              width: '100%'
+            }}
+          >
             <h2 style={{ color: '#6F2DA8', marginBottom: '20px', fontSize: '1.2rem', marginTop: 0 }}>
               RESULTS
             </h2>
-            {results && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '20px' }}>
-                {results.map((res) => {
-                  let netModifiers = res.score;
-                  let immunityCount = 0;
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '20px' }}>
+              {(results || DEFAULT_RESULTS).map((res) => {
+                let netModifiers = res.score;
+                let immunityCount = 0;
 
                   if (netModifiers <= -500) {
                     while (netModifiers <= -500) {
@@ -223,7 +252,7 @@ export default function TeamCalculator() {
                   }
 
                   let textColor = '#000000';
-                  let displayValue = 'Neutral';
+                  let displayValue = results ? 'Neutral' : '--';
 
                   if (immunityCount > 0) {
                     textColor = '#6F2DA8'; 
@@ -279,8 +308,6 @@ export default function TeamCalculator() {
                   );
                 })}
               </div>
-            )}
-
             {/* error output located beneath results */}
             {error && (
               <div className="calculator-box error-box" style={{ color: '#bd2130', marginTop: '20px', textAlign: 'center' }}>
@@ -288,7 +315,6 @@ export default function TeamCalculator() {
               </div>
             )}
           </div>
-        )}
       </div>
     </div>
   );
