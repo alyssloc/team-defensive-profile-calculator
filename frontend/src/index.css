@@ -23,7 +23,7 @@ body {
   font-size: 0.75rem; 
 }
 
-.retro-box {
+.calculator-box {
   background-color: #ffffff;
   border: 3px solid #000000; 
   border-radius: 0; 
@@ -34,7 +34,7 @@ body {
 }
 
 
-.retro-select {
+.calculator-select {
   font-family: gbFont;
   border: 2px solid #000000;
   background-color: #ffffff;
@@ -48,7 +48,7 @@ body {
   text-shadow: none;
 }
 
-.retro-button {
+.calculator-button {
   font-family: gbFont;
   background-color: #ffffff;
   color: #000000;
@@ -62,12 +62,12 @@ body {
   text-shadow: none;
 }
 
-.retro-button:active {
+.calculator-button:active {
   box-shadow: 0px 0px 0px #000000;
   transform: translate(4px, 4px); 
 }
 
-.retro-button:disabled {
+.calculator-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }

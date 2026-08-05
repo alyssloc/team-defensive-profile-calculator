@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore, useCallback } from 'react';
 import { calculateTeamProfile } from '../services/api';
 import type { PokemonInput, TypeScoreResult, CalculationRequest } from '../types/pokemon';
 
@@ -10,6 +10,22 @@ const ALL_POKEMON_TYPES = [
 ];
 
 
+function useMediaQuery(query: string): boolean {
+  const subscribe = useCallback(
+    (callback: () => void) => {
+      const media = window.matchMedia(query);
+      media.addEventListener('change', callback);
+      return () => media.removeEventListener('change', callback);
+    },
+    [query]
+  );
+
+  const getSnapshot = () => window.matchMedia(query).matches;
+  const getServerSnapshot = () => false;
+
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
 export default function TeamCalculator() {
   const [generation, setGeneration] = useState<number>(6);
   const [team, setTeam] = useState<PokemonInput[]>(
@@ -18,6 +34,7 @@ export default function TeamCalculator() {
   const [results, setResults] = useState<TypeScoreResult[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
   const getAvailableTypes = () => {
     if (generation === 1) {
@@ -90,7 +107,7 @@ export default function TeamCalculator() {
 
   return (
     <div 
-      className={`retro-theme calculator-container ${results ? 'has-results' : ''}`}
+      className={`calculator-container ${results ? 'has-results' : ''}`}
       style={{ 
         margin: '6vh auto 0', 
         padding: '10px',
@@ -110,7 +127,7 @@ export default function TeamCalculator() {
 
       {/* gen selection */}
       <div 
-        className="retro-box" 
+        className="calculator-box" 
         style={{ 
           display: 'block',
           width: 'fit-content',
@@ -122,7 +139,7 @@ export default function TeamCalculator() {
           Generation:
         </label>
         <select 
-          className="retro-select"
+          className="calculator-select"
           value={generation} 
           onChange={(e) => handleGenerationChange(Number(e.target.value))}>
           <option value={1}>Gen 1 (RBY)</option>
@@ -132,19 +149,18 @@ export default function TeamCalculator() {
       </div>
       
       <div className="calculator-layout">
-        {/* left: inputs + errors */}
+        {/* left: inputs */}
         <div className="calculator-form-side">
           <form onSubmit={handleSubmit}>
             <h2 style={{ color: '#000000', marginBottom: '20px', fontSize: '1.2rem', marginTop: 0 }}>
               YOUR TEAM
             </h2>
             
-            {/* 6 Team Member Slots */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
               {team.map((pokemon, idx) => (
                 <div 
                   key={idx} 
-                  className="retro-box"
+                  className="calculator-box"
                   style={{ textAlign: 'center' }}
                 >
                   <span style={{ display: 'block', marginBottom: '12px', fontSize: '0.9rem' }}>
@@ -152,7 +168,7 @@ export default function TeamCalculator() {
                   </span>
                   <div>
                     <select 
-                      className="retro-select"
+                      className="calculator-select"
                       value={pokemon.type1} 
                       onChange={(e) => handleTypeChange(idx, 'type1', e.target.value)}
                     >
@@ -162,7 +178,7 @@ export default function TeamCalculator() {
                     </select>
 
                     <select 
-                      className="retro-select"
+                      className="calculator-select"
                       value={pokemon.type2} 
                       onChange={(e) => handleTypeChange(idx, 'type2', e.target.value)}
                     >
@@ -179,98 +195,98 @@ export default function TeamCalculator() {
               <button 
                 type="submit" 
                 disabled={loading} 
-                className="retro-button"
+                className="calculator-button"
               >
                 {loading ? 'ANALYZING...' : 'CALCULATE'}
               </button>
             </div>
           </form>
-
-          {/* error output */}
-          {error && (
-            <div className="retro-box" style={{ color: 'red', marginTop: '30px', textAlign: 'center' }}>
-              ERROR: {error}
-            </div>
-          )}
         </div>
 
-        {/* right side: results */}
-        {results && (
+        {/* right side (large screens) or bottom side (mobile screens after calc) */}
+        {(isLargeScreen || results || error) && (
           <div className="calculator-results-side">
             <h2 style={{ color: '#6F2DA8', marginBottom: '20px', fontSize: '1.2rem', marginTop: 0 }}>
               RESULTS
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '20px' }}>
-              {results.map((res) => {
-                let netModifiers = res.score;
-                let immunityCount = 0;
+            {results && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '20px' }}>
+                {results.map((res) => {
+                  let netModifiers = res.score;
+                  let immunityCount = 0;
 
-                if (netModifiers <= -500) {
-                  while (netModifiers <= -500) {
-                    immunityCount++;
-                    netModifiers += 1000;
+                  if (netModifiers <= -500) {
+                    while (netModifiers <= -500) {
+                      immunityCount++;
+                      netModifiers += 1000;
+                    }
                   }
-                }
 
-                let textColor = '#000000';
-                let displayValue = '';
+                  let textColor = '#000000';
+                  let displayValue = 'Neutral';
 
-                if (immunityCount > 0) {
-                  textColor = '#6F2DA8'; 
-                  displayValue = 'Immune';
-                } 
-                else {
-                  if (netModifiers === 1) {
-                    textColor = '#bd2130'; 
-                    displayValue = '2x Weak';
-                  } else if (netModifiers === 2) {
-                    textColor = '#bd2130';
-                    displayValue = '4x Weak';
-                  } else if (netModifiers > 2) {
-                    textColor = '#bd2130';
-                    displayValue = `${netModifiers}x Weak`; 
-                  } else if (netModifiers === -1) {
-                    textColor = '#1e7e34'; 
-                    displayValue = '2x Resist';
-                  } else if (netModifiers === -2) {
-                    textColor = '#1e7e34';
-                    displayValue = '4x Resist';
-                  } else if (netModifiers < -2) {
-                    textColor = '#1e7e34';
-                    displayValue = `${Math.abs(netModifiers)}x Resist`; 
-                  } else {
-                    displayValue = 'Neutral'; 
+                  if (immunityCount > 0) {
+                    textColor = '#6F2DA8'; 
+                    displayValue = 'Immune';
+                  } 
+                  else {
+                    if (netModifiers === 1) {
+                      textColor = '#bd2130'; 
+                      displayValue = '2x Weak';
+                    } else if (netModifiers === 2) {
+                      textColor = '#bd2130';
+                      displayValue = '4x Weak';
+                    } else if (netModifiers > 2) {
+                      textColor = '#bd2130';
+                      displayValue = `${netModifiers}x Weak`; 
+                    } else if (netModifiers === -1) {
+                      textColor = '#1e7e34'; 
+                      displayValue = '2x Resist';
+                    } else if (netModifiers === -2) {
+                      textColor = '#1e7e34';
+                      displayValue = '4x Resist';
+                    } else if (netModifiers < -2) {
+                      textColor = '#1e7e34';
+                      displayValue = `${Math.abs(netModifiers)}x Resist`; 
+                    }
                   }
-                }
 
-                return (
-                  <div key={res.type} className="retro-box" style={{ textAlign: 'center', padding: '10px' }}>
-                    <div style={{ 
-                      fontSize: '0.8rem', 
-                      marginBottom: '10px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      gap: '6px' 
-                    }}>
-                      <span>{res.type.toUpperCase()}</span>
-                      <img 
-                        src={`/types/${res.type.toLowerCase()}.png`} 
-                        alt={res.type} 
-                        style={{ width: '16px', height: '16px', objectFit: 'contain' }}
-                      />
+                  return (
+                    <div key={res.type} className="calculator-box" style={{ textAlign: 'center', padding: '10px' }}>
+                      <div style={{ 
+                        fontSize: '0.8rem', 
+                        marginBottom: '10px', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        gap: '6px' 
+                      }}>
+                        <span>{res.type.toUpperCase()}</span>
+                        <img 
+                          src={`/types/${res.type.toLowerCase()}.png`} 
+                          alt={res.type} 
+                          style={{ width: '16px', height: '16px', objectFit: 'contain' }}
+                        />
+                      </div>
+                      <div style={{ 
+                        fontSize: '1.1rem', 
+                        fontWeight: 'bold',
+                        color: textColor 
+                      }}>
+                        {displayValue}
+                      </div>
                     </div>
-                    <div style={{ 
-                      fontSize: '1.1rem', 
-                      fontWeight: 'bold',
-                      color: textColor 
-                    }}>
-                      {displayValue}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* error output located beneath results */}
+            {error && (
+              <div className="calculator-box error-box" style={{ color: '#bd2130', marginTop: '20px', textAlign: 'center' }}>
+                ERROR: {error}
+              </div>
+            )}
           </div>
         )}
       </div>
