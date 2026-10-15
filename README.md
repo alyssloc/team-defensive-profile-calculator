@@ -42,7 +42,7 @@ Backend and frontend deployed on seperate Cloud Run Services, deployed using Fir
 
 
 ## Active Link
-https://pokemonteamdefensivecalculator.com
+https://www.pokemonteamdefensivecalculator.com/
 
 ## Run Locally
 This project was orginally built to accept command line or file inputs. 
